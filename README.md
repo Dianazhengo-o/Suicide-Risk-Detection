@@ -1,8 +1,6 @@
 # Suicide-Risk-Detection
-Interpretable Suicide Risk Detection in Traditional Chinese: A Hybrid NLP Approach combining Chinese-MentalBERT with C-SSRS Grounded Linguistic Phenotyping.
 
 # 繁體中文社群之自殺風險可解釋性偵測模型
-> Interpretable Suicide Risk Detection in Traditional Chinese: A Hybrid NLP Framework
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1uh5zJflIHOCRdso0Fn98Gx5okrqNP84_?usp=sharing)
 
@@ -11,14 +9,14 @@ Interpretable Suicide Risk Detection in Traditional Chinese: A Hybrid NLP Approa
 
 本專案針對台灣社群（如 PTT Prozac 板）的文本特性，建構了一個強調高度可解釋性 (Interpretability) 的機器學習框架。有別於傳統的黑盒子深度學習模型，本研究試驗了 `Chinese-MentalBERT` 的深層語意表徵與多項手工萃取的語言學特徵，不僅提升預測準確度，也驗證了語言學特徵能夠帶來更多的可解釋性。
 
-## 核心特色
+## 特色
 * **在地化 NLP 前處理**：整合 `OpenCC` 進行辭典繁簡轉換，並使用 `ckip-transformers` 進行斷詞與詞性標註（POS Tagging）。系統內建針對在地社群用語（如：「登出人生」、「重刷首抽」、「FM2」）的保護機制，避免關鍵字被錯誤切分。
 * **嚴謹的統計與語言學特徵**：
     * 萃取包含絕對化用語 (Absolutist words)、否定詞、第一人稱代名詞 (Self-focus)、未來詞 (Future words) 以及各類詞性密度（如認知動詞、情緒狀態）等指標。
     * 系統自動計算 Cohen's d 與 Cliff's delta 效果量，並執行 Mann-Whitney U 檢定，產出統計顯著性報表。
-* **混合型特徵工程與降維**：引入動態 PCA (Principal Component Analysis) 將 BERT 高維度向量降維（保留 90% 變異數），確保語意特徵在隨機森林模型中不會過度主導，完美融合解釋性高的手工語言特徵。
+* **混合型特徵工程與降維**：引入動態 PCA (Principal Component Analysis) 將 BERT 高維度向量降維（保留 90% 變異數），確保語意特徵在隨機森林模型中不會過度主導，融合解釋性高的手工語言特徵。
 * **處理極端不平衡資料**：採用 SMOTEENN (SMOTE + ENN) 進行過採樣與決策邊界清理，大幅改善高風險樣本極少的類別不平衡問題。
-* **SHAP 模型可解釋性**：整合 SHAP (SHapley Additive exPlanations) 套件，提供 Token 等級的視覺化解釋，直觀呈現 MentalBERT 模型是如何根據特定詞彙增加或降低風險預測機率。
+* **SHAP 模型可解釋性**：整合 SHAP (SHapley Additive exPlanations) 套件，提供視覺化解釋，直觀呈現 MentalBERT 模型是如何根據特定詞彙增加或降低風險預測機率。
 
 ## 系統架構與執行流程
 本專案程式碼涵蓋以下四個主要執行階段：
@@ -48,3 +46,13 @@ pip install transformers
 pip install shap
 pip install imbalanced-learn
 pip install scikit-learn pandas numpy matplotlib seaborn torch
+
+
+### 資料隱私與學術倫理聲明
+
+ 1. 資料隱私
+本研究所分析之語料原始來源雖為公開之網路社群（PTT Prozac 板），但文本內容涉及高度敏感之個人心理健康狀態、負面情緒傾訴與潛在的急性自殺意念。
+將此類帶有極端負面情緒的零散文章進行系統性蒐集與心理學量表標註後，資料集具備極高的敏感性，為防止對發文者造成二次傷害，**本專案不公開原始文本資料集**。
+
+本專案所附之 Colab 執行連結，其唯一目的為展示研究方法之可行性，並供檢視流程與執行結果以驗證真實性。所有公開之數據僅限於量化統計指標與特徵重要性分析，任何可能識別出特定使用者之文本皆已被嚴格阻擋與排除。
+
